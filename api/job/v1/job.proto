@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package api.job.v1;
+
+option go_package = "kratos-arod-im/api/job/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.job.v1";
+
+import "google/protobuf/struct.proto";
+
+service Job {
+
+}
+
+message MsgBody {
+  string msg_type = 1;
+  // 根据不同的消息类型有不同的消息内容
+  google.protobuf.Struct msg_content = 2;
+}
+
+message SingleSendMsg{
+  map<string, string> server = 1;
+  string sendId = 2;
+  string seq = 3;
+  repeated MsgBody msg = 4;
+}

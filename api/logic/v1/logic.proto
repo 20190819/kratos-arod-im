@@ -1,0 +1,195 @@
+syntax = "proto3";
+
+package api.logic.v1;
+
+option go_package = "kartos-arod-im/api/logic/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.logic.v1";
+
+import "google/protobuf/struct.proto";
+import "google/api/annotations.proto";
+
+service Logic {
+  rpc SingleSend(SingleSendRequest) returns(SendReply){
+    option(google.api.http) = {
+      post:"v1/single/send",
+      body:"*",
+    };
+  }
+  rpc SingleRecall(SingleRecallRequest)returns(SendReply){
+    option(google.api.http) = {
+      post:"v1/single/recall",
+      body:"*",
+    };
+  }
+  rpc GroupSend(GroupSendRequest)returns(SendReply){
+    option(google.api.http) = {
+      post:"v1/group/send",
+      body:"*",
+    };
+  }
+  rpc GroupSendMention(GroupSendMentionRequest)returns(SendReply){
+    option(google.api.http) = {
+      post:"v1/group/send_mention",
+      body:"*",
+    };
+  }
+  rpc GroupRecall(GroupRecallRequest)returns(SendReply){
+    option(google.api.http) = {
+      post:"v1/group/recall",
+      body:"*",
+    };
+  }
+  rpc RoomSend(GroupSendRequest)returns(SendReply){
+    option(google.api.http) = {
+      post:"v1/room/send",
+      body:"*",
+    };
+  }
+  rpc RoomBroadcast(GroupSendRequest)returns(SendReply){
+    option(google.api.http) = {
+      post:"v1/room/broadcast",
+      body:"*",
+    };
+  }
+  rpc Login(LoginRequest)returns(LoginReply){
+    option(google.api.http) = {
+      post:"v1/login",
+      body:"*",
+    };
+  }
+  rpc GetService(GetServiceReq)returns(GetServiceReply){
+    option(google.api.http) = {
+      get:"v1/service"
+    };
+  }
+  rpc Connect(ConnectReq)returns(ConnectReply);
+  rpc DisConnect(DisConnectReq)returns(DisConnectReply);
+}
+
+enum MsgTypes{
+  text = 0; // 文本消息
+  image = 1; // 图片消息
+  face = 2; // 表情消息
+  video = 3; // 视频消息
+  file = 4; // 文件消息
+  sound = 5; // 音频消息
+}
+
+message SendReply{
+  string action_status = 1; // 请求结果
+  string error_info = 2;  // 错误信息
+  uint32 error_code = 3;  // 错误码
+  int64 msg_time = 4; // 消息时间戳
+  string msg_seq = 5; //
+}
+
+message RecallReply{
+  string action_status = 1; // 请求结果
+  string error_info = 2;  // 错误信息
+  uint32 error_code = 3;  // 错误码
+}
+
+message MsgBody {
+  string msg_type = 1;
+  // 根据不同的消息类型有不同的消息内容
+  google.protobuf.Struct msg_content = 2;
+}
+
+// SingleSendRequest 单聊发送消息请求
+message SingleSendRequest{
+  string uid = 1;
+  string cid = 2;
+  repeated MsgBody msg_body = 3;
+}
+
+// SingleRecallRequest 单聊撤回消息请求
+message SingleRecallRequest{
+  string uid = 1;
+  string cid = 2;
+  string msg_key = 3;
+}
+
+// GroupSendRequest 群聊发送消息请求
+message GroupSendRequest{
+  string uid = 1;
+  string cid = 2;
+  repeated MsgBody msg_body = 3;
+}
+
+// GroupSendMentionRequest 群聊@消息请求
+message GroupSendMentionRequest{
+  message GroupAtInfo{
+    // 1--全体 0--指定用户
+    uint32 group_at_flag = 1;
+    uint32 group_at_uid = 2;
+  }
+
+  string uid = 1;
+  string group_id = 2;
+  repeated MsgBody msg_body = 3;
+  repeated GroupAtInfo group_at_info = 4;
+}
+
+// GroupRecallRequest 群聊撤回消息请求
+message GroupRecallRequest{
+  string group_id = 1;
+  string msg_seq = 2;
+}
+
+// ConnectReq 连接请求
+message ConnectReq{
+  string server = 1;
+  string uid = 2;
+  string address = 3; // ip:port
+  bytes token = 4;
+}
+
+// ConnectReply 连接响应
+message ConnectReply{
+  string action_status = 1; // 请求结果
+  string error_info = 2;  // 错误信息
+  uint32 error_code = 3;  // 错误码
+  bool success = 4;
+}
+
+//
+message DisConnectReq{
+  string uid = 1;
+  string address = 2; // ip:port
+  string server = 3;
+}
+
+message DisConnectReply{
+  string action_status = 1; // 请求结果
+  string error_info = 2;  // 错误信息
+  uint32 error_code = 3;  // 错误码
+  bool success = 4;
+}
+
+// LoginReq 登录请求
+message LoginRequest{
+  string uid = 1;
+}
+
+// LoginReply 登录响应
+message LoginReply{
+  string action_status = 1; // 请求结果
+  string error_info = 2;
+  uint32 error_code = 3;
+  string access_token = 4;
+  string refresh_token = 5;
+}
+
+// GetServiceReq  获取服务地址请求
+message GetServiceReq{
+
+}
+
+// GetServiceReply 获取服务地址响应
+message GetServiceReply{
+  string action_status = 1; // 请求结果
+  string error_info = 2;  // 错误信息
+  uint32 error_code = 3;  // 错误码
+  bool success = 4;
+}

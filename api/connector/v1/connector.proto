@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+package api.connector.v1;
+
+option go_package = "kratos-arod-im/api/connector/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.connector.v1";
+
+import "google/protobuf/struct.proto";
+
+service Connector {
+  rpc SingleSend(SingleSendReq) returns(SingleSendReply);
+}
+
+message SingleSendReq {
+  string address = 1;
+  string senderId = 2;
+  string seq = 3;
+  repeated MsgBody msg = 4;
+}
+
+message MsgBody {
+  string msg_type = 1;
+  // 根据不同的消息类型有不同的消息内容
+  google.protobuf.Struct msg_content = 2;
+}
+
+message SingleSendReply {
+  string reply = 1;
+}
+
+message GroupSendReq {
+}
+
+message GroupSendReply{
+
+}
+
+message RoomReq {
+
+}
+
+message RoomReply{
+
+}
+
+message BroadCastReq{
+
+}
+
+message BroadCastReply{
+  map<string, bool> rooms = 1;
+}

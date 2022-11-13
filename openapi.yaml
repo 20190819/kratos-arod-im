@@ -1,0 +1,320 @@
+# Generated with protoc-gen-openapi
+# https://github.com/google/gnostic/tree/master/cmd/protoc-gen-openapi
+
+openapi: 3.0.3
+info:
+    title: ""
+    version: 0.0.1
+paths:
+    /helloworld/{name}:
+        get:
+            tags:
+                - Greeter
+            description: Sends a greeting
+            operationId: Greeter_SayHello
+            parameters:
+                - name: name
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/helloworld.v1.HelloReply'
+    v1/group/recall:
+        post:
+            tags:
+                - Logic
+            operationId: Logic_GroupRecall
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.logic.v1.GroupRecallRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.logic.v1.SendReply'
+    v1/group/send:
+        post:
+            tags:
+                - Logic
+            operationId: Logic_GroupSend
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.logic.v1.GroupSendRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.logic.v1.SendReply'
+    v1/group/send_mention:
+        post:
+            tags:
+                - Logic
+            operationId: Logic_GroupSendMention
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.logic.v1.GroupSendMentionRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.logic.v1.SendReply'
+    v1/login:
+        post:
+            tags:
+                - Logic
+            operationId: Logic_Login
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.logic.v1.LoginRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.logic.v1.LoginReply'
+    v1/room/broadcast:
+        post:
+            tags:
+                - Logic
+            operationId: Logic_RoomBroadcast
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.logic.v1.GroupSendRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.logic.v1.SendReply'
+    v1/room/send:
+        post:
+            tags:
+                - Logic
+            operationId: Logic_RoomSend
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.logic.v1.GroupSendRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.logic.v1.SendReply'
+    v1/service:
+        get:
+            tags:
+                - Logic
+            operationId: Logic_GetService
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.logic.v1.GetServiceReply'
+    v1/single/recall:
+        post:
+            tags:
+                - Logic
+            operationId: Logic_SingleRecall
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.logic.v1.SingleRecallRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.logic.v1.SendReply'
+    v1/single/send:
+        post:
+            tags:
+                - Logic
+            operationId: Logic_SingleSend
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.logic.v1.SingleSendRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.logic.v1.SendReply'
+components:
+    schemas:
+        api.logic.v1.GetServiceReply:
+            type: object
+            properties:
+                actionStatus:
+                    type: string
+                errorInfo:
+                    type: string
+                errorCode:
+                    type: integer
+                    format: uint32
+                success:
+                    type: boolean
+            description: GetServiceReply 获取服务地址响应
+        api.logic.v1.GroupRecallRequest:
+            type: object
+            properties:
+                groupId:
+                    type: string
+                msgSeq:
+                    type: string
+            description: GroupRecallRequest 群聊撤回消息请求
+        api.logic.v1.GroupSendMentionRequest:
+            type: object
+            properties:
+                uid:
+                    type: string
+                groupId:
+                    type: string
+                msgBody:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.logic.v1.MsgBody'
+                groupAtInfo:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.logic.v1.GroupSendMentionRequest_GroupAtInfo'
+            description: GroupSendMentionRequest 群聊@消息请求
+        api.logic.v1.GroupSendMentionRequest_GroupAtInfo:
+            type: object
+            properties:
+                groupAtFlag:
+                    type: integer
+                    description: 1--全体 0--指定用户
+                    format: uint32
+                groupAtUid:
+                    type: integer
+                    format: uint32
+        api.logic.v1.GroupSendRequest:
+            type: object
+            properties:
+                uid:
+                    type: string
+                cid:
+                    type: string
+                msgBody:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.logic.v1.MsgBody'
+            description: GroupSendRequest 群聊发送消息请求
+        api.logic.v1.LoginReply:
+            type: object
+            properties:
+                actionStatus:
+                    type: string
+                errorInfo:
+                    type: string
+                errorCode:
+                    type: integer
+                    format: uint32
+                accessToken:
+                    type: string
+                refreshToken:
+                    type: string
+            description: LoginReply 登录响应
+        api.logic.v1.LoginRequest:
+            type: object
+            properties:
+                uid:
+                    type: string
+            description: LoginReq 登录请求
+        api.logic.v1.MsgBody:
+            type: object
+            properties:
+                msgType:
+                    type: string
+                msgContent:
+                    type: object
+                    description: 根据不同的消息类型有不同的消息内容
+        api.logic.v1.SendReply:
+            type: object
+            properties:
+                actionStatus:
+                    type: string
+                errorInfo:
+                    type: string
+                errorCode:
+                    type: integer
+                    format: uint32
+                msgTime:
+                    type: integer
+                    format: int64
+                msgSeq:
+                    type: string
+        api.logic.v1.SingleRecallRequest:
+            type: object
+            properties:
+                uid:
+                    type: string
+                cid:
+                    type: string
+                msgKey:
+                    type: string
+            description: SingleRecallRequest 单聊撤回消息请求
+        api.logic.v1.SingleSendRequest:
+            type: object
+            properties:
+                uid:
+                    type: string
+                cid:
+                    type: string
+                msgBody:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.logic.v1.MsgBody'
+            description: SingleSendRequest 单聊发送消息请求
+        helloworld.v1.HelloReply:
+            type: object
+            properties:
+                message:
+                    type: string
+            description: The response message containing the greetings
+tags:
+    - name: Greeter
+      description: The greeting service definition.
+    - name: Logic
